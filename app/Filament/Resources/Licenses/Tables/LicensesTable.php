@@ -4,6 +4,7 @@ namespace App\Filament\Resources\Licenses\Tables;
 
 use App\Filament\Actions\BulkSuspendLicenseAction;
 use App\Filament\Actions\ReactivateLicenseAction;
+use App\Filament\Actions\RegenerateSigningSecretAction;
 use App\Filament\Actions\SuspendLicenseAction;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\EditAction;
@@ -32,6 +33,7 @@ class LicensesTable
                 EditAction::make(),
                 SuspendLicenseAction::make(),
                 ReactivateLicenseAction::make(),
+                RegenerateSigningSecretAction::make(),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

@@ -13,7 +13,7 @@ class ClientOverview extends StatsOverviewWidget
 
     protected function getStats(): array
     {
-        $data = Cache::remember('widget:client_overview', 60, function () {
+        $data = Cache::remember('widget:client_overview', config('nusalicense.widget_cache_ttl.stats'), function () {
             return [
                 'total' => Client::count(),
                 'active' => Client::where('is_active', true)->count(),

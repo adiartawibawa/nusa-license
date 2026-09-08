@@ -25,7 +25,9 @@ class SendExpiryReminderCommand extends Command
         $totalSkipped = 0;
         $totalFailed = 0;
 
-        foreach (self::REMINDER_DAYS as $daysBefore) {
+        $reminderDays = config('nusalicense.expiry.reminder_days');
+
+        foreach ($reminderDays as $daysBefore) {
             $targetDate = now()->addDays($daysBefore)->toDateString();
 
             $licenses = License::query()

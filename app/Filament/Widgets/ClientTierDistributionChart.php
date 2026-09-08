@@ -19,7 +19,7 @@ class ClientTierDistributionChart extends ChartWidget
 
     protected function getData(): array
     {
-        $counts = Cache::remember('widget:client_tier_distribution', 60, function () {
+        $counts = Cache::remember('widget:client_tier_distribution', config('nusalicense.widget_cache_ttl.stats'), function () {
             return Client::selectRaw('tier, count(*) as total')
                 ->groupBy('tier')
                 ->pluck('total', 'tier')

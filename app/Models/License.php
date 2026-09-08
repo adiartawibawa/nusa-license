@@ -74,8 +74,22 @@ class License extends Model
     {
         static::creating(function (License $license) {
             $license->license_key = (string) Str::uuid7();
-            $license->signing_secret = Str::random(64);
+            $license->signing_secret = Str::random(
+                config('nusalicense.verification.signing_secret_length')
+            );
             $license->status ??= LicenseStatus::Active;
+
+            // Grace period default hanya diterapkan kalau admin belum set manual
+            // dan expires_at sudah ditentukan (butuh basis tanggal untuk hitung).
+            if (is_null($license->grace_period_until) && $license->expires_at) {
+                $defaultDays = config('nusalicense.expiry.default_grace_period_days');
+
+                if (! is_null($defaultDays)) {
+                    $license->grace_period_until = $license->expires_at
+                        ->copy()
+                        ->addDays($defaultDays);
+                }
+            }
         });
     }
 }

@@ -2,6 +2,8 @@
 
 namespace App\Filament\Resources\Clients\RelationManagers;
 
+use App\Filament\Actions\UnverifyDomainAction;
+use App\Filament\Actions\VerifyDomainAction;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\CreateAction;
 use Filament\Actions\DeleteAction;
@@ -56,6 +58,8 @@ class DomainsRelationManager extends RelationManager
             ])
             ->recordActions([
                 EditAction::make(),
+                VerifyDomainAction::make(),
+                UnverifyDomainAction::make(),
                 DeleteAction::make(),
             ])
             ->toolbarActions([

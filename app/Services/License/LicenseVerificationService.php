@@ -11,8 +11,6 @@ use Illuminate\Support\Facades\DB;
 
 class LicenseVerificationService
 {
-    private const STATUS_CACHE_TTL = 60; // detik — cache hasil resolve status
-
     public function __construct(
         private readonly SignatureService $signatureService,
         private readonly DomainMatcherService $domainMatcher,
@@ -74,9 +72,9 @@ class LicenseVerificationService
     public function resolveStatus(License $license, ?string $domain = null, ?string $ip = null): LicenseStatus
     {
         $cacheKey = "license_status:{$license->license_key}";
+        $ttl = config('nusalicense.verification.status_cache_ttl');
 
-        return Cache::remember($cacheKey, self::STATUS_CACHE_TTL, function () use ($license, $domain, $ip) {
-            // Manual override admin (suspended) selalu menang — tidak perlu cek lain
+        return Cache::remember($cacheKey, $ttl, function () use ($license, $domain, $ip) {
             if ($license->status === LicenseStatus::Suspended) {
                 return LicenseStatus::Suspended;
             }
@@ -111,6 +109,17 @@ class LicenseVerificationService
         });
 
         Cache::forget("license_status:{$license->license_key}");
+        $this->forgetWidgetCaches();
+    }
+
+    private function forgetWidgetCaches(): void
+    {
+        Cache::forget('widget:license_status_counts');
+        Cache::forget('widget:license_expiring_soon');
+
+        foreach (LicenseStatus::cases() as $status) {
+            Cache::forget("widget:license_trend:{$status->value}");
+        }
     }
 
     public function reactivate(License $license, ?string $adminId = null): void

@@ -23,6 +23,12 @@ class LicenseForm
                     ->placeholder('Auto-generated saat create'),
                 DatePicker::make('issued_at')->required(),
                 DatePicker::make('expires_at')->required(),
+                DatePicker::make('grace_period_until')
+                    ->label('Grace Period Sampai')
+                    ->helperText(fn (string $operation) => $operation === 'create'
+                        ? 'Kosongkan untuk pakai default sistem ('.config('nusalicense.expiry.default_grace_period_days').' hari setelah expired).'
+                        : null
+                    ),
             ]);
     }
 }

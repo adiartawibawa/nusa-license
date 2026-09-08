@@ -12,6 +12,7 @@ use Override;
 #[Fillable([
     'client_id', 'domain_name', 'server_ip',
     'is_primary', 'is_verified', 'verified_at',
+    'verified_by',
 ])]
 class Domain extends Model
 {
@@ -30,6 +31,11 @@ class Domain extends Model
     public function client(): BelongsTo
     {
         return $this->belongsTo(Client::class);
+    }
+
+    public function verifiedBy(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'verified_by');
     }
 
     // Normalisasi domain saat disimpan — hindari mismatch "www." atau case

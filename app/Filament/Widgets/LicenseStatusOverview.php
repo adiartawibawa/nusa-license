@@ -15,7 +15,9 @@ class LicenseStatusOverview extends StatsOverviewWidget
 
     protected function getStats(): array
     {
-        $counts = Cache::remember('widget:license_status_counts', 55, function () {
+        $statsTtl = config('nusalicense.widget_cache_ttl.stats');
+
+        $counts = Cache::remember('widget:license_status_counts', $statsTtl, function () {
             return License::query()
                 ->selectRaw('status, count(*) as total')
                 ->groupBy('status')
@@ -26,7 +28,7 @@ class LicenseStatusOverview extends StatsOverviewWidget
                 ->toArray(); // <-- WAJIB: simpan array, bukan Collection
         });
 
-        $expiringSoonCount = Cache::remember('widget:license_expiring_soon', 55, function () {
+        $expiringSoonCount = Cache::remember('widget:license_expiring_soon', $statsTtl, function () {
             return License::query()
                 ->where('status', LicenseStatus::Active)
                 ->whereBetween('expires_at', [now(), now()->addDays(7)])
@@ -74,7 +76,9 @@ class LicenseStatusOverview extends StatsOverviewWidget
      */
     private function getTrendData(LicenseStatus $status): array
     {
-        return Cache::remember("widget:license_trend:{$status->value}", 300, function () use ($status) {
+        $trendTtl = config('nusalicense.widget_cache_ttl.trend');
+
+        return Cache::remember("widget:license_trend:{$status->value}", $trendTtl, function () use ($status) {
             $raw = License::query()
                 ->where('status', $status)
                 ->where('last_status_changed_at', '>=', now()->subDays(7))

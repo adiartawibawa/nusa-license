@@ -6,10 +6,6 @@ use Illuminate\Support\Facades\Cache;
 
 class SignatureService
 {
-    private const MAX_TIMESTAMP_DRIFT = 300; // 5 menit toleransi clock skew
-
-    private const NONCE_TTL = 600;            // simpan nonce 10 menit utk cegah replay
-
     public function verify(
         string $licenseKey,
         string $domain,
@@ -28,7 +24,6 @@ class SignatureService
 
         $expected = $this->sign($licenseKey, $domain, $timestamp, $nonce, $secret);
 
-        // hash_equals wajib, hindari timing attack
         if (! hash_equals($expected, $signature)) {
             return false;
         }
@@ -52,7 +47,9 @@ class SignatureService
 
     private function isTimestampFresh(int $timestamp): bool
     {
-        return abs(time() - $timestamp) <= self::MAX_TIMESTAMP_DRIFT;
+        $maxDrift = config('nusalicense.verification.max_timestamp_drift_seconds');
+
+        return abs(time() - $timestamp) <= $maxDrift;
     }
 
     private function isNonceReused(string $nonce, string $licenseKey): bool
@@ -62,7 +59,9 @@ class SignatureService
 
     private function markNonceUsed(string $nonce, string $licenseKey): void
     {
-        Cache::put($this->nonceCacheKey($nonce, $licenseKey), true, self::NONCE_TTL);
+        $ttl = config('nusalicense.verification.nonce_ttl_seconds');
+
+        Cache::put($this->nonceCacheKey($nonce, $licenseKey), true, $ttl);
     }
 
     private function nonceCacheKey(string $nonce, string $licenseKey): string

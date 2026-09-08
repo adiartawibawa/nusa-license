@@ -11,16 +11,15 @@ class LicenseFactory extends Factory
 {
     public function definition(): array
     {
-        $issuedAt = fake()->dateTimeBetween('-1 year', 'now');
 
         return [
             'id' => (string) Str::uuid7(),
             'client_id' => Client::factory(),
             'license_key' => (string) Str::uuid7(),
-            'signing_secret' => Str::random(64),
+            'signing_secret' => Str::random(config('nusalicense.verification.signing_secret_length')),
             'status' => LicenseStatus::Active,
-            'issued_at' => $issuedAt,
-            'expires_at' => fake()->dateTimeBetween($issuedAt, '+1 year'),
+            'issued_at' => now()->subMonths(1),
+            'expires_at' => now()->addYear(),
         ];
     }
 
@@ -36,7 +35,8 @@ class LicenseFactory extends Factory
     {
         return $this->state(fn () => [
             'status' => LicenseStatus::Expired,
-            'expires_at' => fake()->dateTimeBetween('-6 months', '-1 day'),
+            'issued_at' => now()->subYear(),
+            'expires_at' => fake()->dateTimeBetween('-6 months', '-1 day'), // eksplisit di masa lalu
         ]);
     }
 
@@ -44,6 +44,7 @@ class LicenseFactory extends Factory
     {
         return $this->state(fn () => [
             'status' => LicenseStatus::Active,
+            'issued_at' => now()->subMonths(11),
             'expires_at' => fake()->dateTimeBetween('now', '+7 days'),
         ]);
     }
