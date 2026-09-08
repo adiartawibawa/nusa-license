@@ -9,7 +9,7 @@ beforeEach(function () {
 
 it('menghasilkan signature yang valid dan bisa diverifikasi', function () {
     $licenseKey = 'lk-123';
-    $domain = 'villa-test.com';
+    $domain = 'app-test.com';
     $timestamp = time();
     $nonce = 'abc123';
 
@@ -23,7 +23,7 @@ it('menghasilkan signature yang valid dan bisa diverifikasi', function () {
 it('menolak signature yang salah', function () {
     $result = $this->service->verify(
         licenseKey: 'lk-123',
-        domain: 'villa-test.com',
+        domain: 'app-test.com',
         timestamp: time(),
         nonce: 'abc123',
         signature: 'signature-palsu',
@@ -37,11 +37,11 @@ it('menolak signature yang valid tapi secret berbeda', function () {
     $timestamp = time();
     $nonce = 'abc123';
 
-    $signature = $this->service->sign('lk-123', 'villa-test.com', $timestamp, $nonce, $this->secret);
+    $signature = $this->service->sign('lk-123', 'app-test.com', $timestamp, $nonce, $this->secret);
 
     $result = $this->service->verify(
         licenseKey: 'lk-123',
-        domain: 'villa-test.com',
+        domain: 'app-test.com',
         timestamp: $timestamp,
         nonce: $nonce,
         signature: $signature,
@@ -57,11 +57,11 @@ it('menolak request dengan timestamp terlalu lama (di luar drift tolerance)', fu
     $expiredTimestamp = time() - 400; // 400 detik lalu, melebihi toleransi 300
     $nonce = 'abc123';
 
-    $signature = $this->service->sign('lk-123', 'villa-test.com', $expiredTimestamp, $nonce, $this->secret);
+    $signature = $this->service->sign('lk-123', 'app-test.com', $expiredTimestamp, $nonce, $this->secret);
 
     $result = $this->service->verify(
         licenseKey: 'lk-123',
-        domain: 'villa-test.com',
+        domain: 'app-test.com',
         timestamp: $expiredTimestamp,
         nonce: $nonce,
         signature: $signature,
@@ -77,11 +77,11 @@ it('menerima timestamp dalam batas toleransi drift', function () {
     $timestamp = time() - 200; // masih dalam toleransi 300 detik
     $nonce = 'abc123';
 
-    $signature = $this->service->sign('lk-123', 'villa-test.com', $timestamp, $nonce, $this->secret);
+    $signature = $this->service->sign('lk-123', 'app-test.com', $timestamp, $nonce, $this->secret);
 
     $result = $this->service->verify(
         licenseKey: 'lk-123',
-        domain: 'villa-test.com',
+        domain: 'app-test.com',
         timestamp: $timestamp,
         nonce: $nonce,
         signature: $signature,
@@ -95,14 +95,14 @@ it('menolak nonce yang dipakai ulang (replay attack)', function () {
     $timestamp = time();
     $nonce = 'nonce-sekali-pakai';
 
-    $signature = $this->service->sign('lk-123', 'villa-test.com', $timestamp, $nonce, $this->secret);
+    $signature = $this->service->sign('lk-123', 'app-test.com', $timestamp, $nonce, $this->secret);
 
     // Percobaan pertama — harus lolos
-    $firstAttempt = $this->service->verify('lk-123', 'villa-test.com', $timestamp, $nonce, $signature, $this->secret);
+    $firstAttempt = $this->service->verify('lk-123', 'app-test.com', $timestamp, $nonce, $signature, $this->secret);
     expect($firstAttempt)->toBeTrue();
 
     // Percobaan kedua dengan nonce & signature SAMA — harus ditolak (replay)
-    $secondAttempt = $this->service->verify('lk-123', 'villa-test.com', $timestamp, $nonce, $signature, $this->secret);
+    $secondAttempt = $this->service->verify('lk-123', 'app-test.com', $timestamp, $nonce, $signature, $this->secret);
     expect($secondAttempt)->toBeFalse();
 });
 
@@ -110,9 +110,9 @@ it('nonce yang sama boleh dipakai lagi untuk license_key berbeda', function () {
     $timestamp = time();
     $nonce = 'shared-nonce';
 
-    $sig1 = $this->service->sign('lk-AAA', 'villa-a.com', $timestamp, $nonce, $this->secret);
-    $sig2 = $this->service->sign('lk-BBB', 'villa-b.com', $timestamp, $nonce, $this->secret);
+    $sig1 = $this->service->sign('lk-AAA', 'app-a.com', $timestamp, $nonce, $this->secret);
+    $sig2 = $this->service->sign('lk-BBB', 'app-b.com', $timestamp, $nonce, $this->secret);
 
-    expect($this->service->verify('lk-AAA', 'villa-a.com', $timestamp, $nonce, $sig1, $this->secret))->toBeTrue();
-    expect($this->service->verify('lk-BBB', 'villa-b.com', $timestamp, $nonce, $sig2, $this->secret))->toBeTrue();
+    expect($this->service->verify('lk-AAA', 'app-a.com', $timestamp, $nonce, $sig1, $this->secret))->toBeTrue();
+    expect($this->service->verify('lk-BBB', 'app-b.com', $timestamp, $nonce, $sig2, $this->secret))->toBeTrue();
 });

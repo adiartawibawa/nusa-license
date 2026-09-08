@@ -17,8 +17,8 @@ return new class extends Migration
             $table->string('company_name')->nullable();
             $table->string('email')->unique();
             $table->string('phone_number')->nullable(); // untuk WA alert, format E.164
-            $table->string('pic_name')->nullable();      // penanggung jawab villa
-            $table->string('villa_address')->nullable();
+            $table->string('pic_name')->nullable();      // penanggung jawab aplikasi
+            $table->string('address')->nullable();
             $table->string('tier')->default('standard'); // ClientTier enum cast
             $table->boolean('is_active')->default(true);
             $table->timestamps();

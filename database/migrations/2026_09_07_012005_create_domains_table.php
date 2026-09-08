@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('domains', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->foreignUuid('client_id')->constrained()->cascadeOnDelete();
-            $table->string('domain_name');       // e.g. villa-sunset.com
+            $table->string('domain_name');       // e.g. app-sunset.com
             $table->string('server_ip', 45)->nullable(); // support IPv6
             $table->boolean('is_primary')->default(false);
             $table->boolean('is_verified')->default(false);

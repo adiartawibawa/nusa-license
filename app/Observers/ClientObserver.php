@@ -15,7 +15,7 @@ class ClientObserver
     public function updated(Client $client): void
     {
         // Cukup invalidate kalau field yang relevan ke widget berubah —
-        // hindari cache-bust tiap kali field lain (mis. villa_address) diubah.
+        // hindari cache-bust tiap kali field lain (mis. address) diubah.
         if ($client->wasChanged(['tier', 'is_active'])) {
             $this->forgetWidgetCaches();
         }

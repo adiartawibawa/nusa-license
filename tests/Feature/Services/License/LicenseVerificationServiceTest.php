@@ -62,11 +62,11 @@ it('tetap ACTIVE ketika lewat expires_at tapi masih dalam grace period', functio
 it('resolve UNREGISTERED_DOMAIN ketika domain tidak terverifikasi', function () {
     $license = License::factory()->for($this->client)->create();
     Domain::factory()->for($this->client)->create([
-        'domain_name' => 'villa-belum-verified.com',
+        'domain_name' => 'app-belum-verified.com',
         'is_verified' => false,
     ]);
 
-    $status = $this->service->resolveStatus($license, 'villa-belum-verified.com');
+    $status = $this->service->resolveStatus($license, 'app-belum-verified.com');
 
     expect($status)->toBe(LicenseStatus::UnregisteredDomain);
 });
@@ -183,7 +183,7 @@ it('verify() berhasil untuk request yang sah sepenuhnya', function () {
 it('verify() menolak license_key yang tidak ada', function () {
     $result = $this->service->verify([
         'license_key' => (string) Str::uuid7(),
-        'domain' => 'villa-asing.com',
+        'domain' => 'app-asing.com',
         'timestamp' => time(),
         'nonce' => 'abc',
         'signature' => 'invalid',
@@ -199,7 +199,7 @@ it('verify() menolak signature yang tidak valid', function () {
 
     $result = $this->service->verify([
         'license_key' => $license->license_key,
-        'domain' => 'villa.com',
+        'domain' => 'app.com',
         'timestamp' => time(),
         'nonce' => 'abc',
         'signature' => 'signature-ngasal',

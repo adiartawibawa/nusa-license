@@ -15,7 +15,7 @@ class DomainFactory extends Factory
         return [
             'id' => (string) Str::uuid7(),
             'client_id' => Client::factory(),
-            'domain_name' => "{$slug}-villa.com",
+            'domain_name' => "{$slug}-app.com",
             'server_ip' => fake()->ipv4(),
             'is_primary' => true,
             'is_verified' => true,

@@ -38,7 +38,7 @@ class LicenseExpiredNotice extends Notification
             ->subject('License Anda Telah Kadaluarsa')
             ->greeting("Halo {$notifiable->name},")
             ->line("License dengan key {$this->license->license_key} telah melewati masa berlaku pada {$this->license->expires_at->toDateString()}.")
-            ->line('Aplikasi villa Anda saat ini terkunci. Segera lakukan perpanjangan untuk mengaktifkan kembali layanan.')
+            ->line('Aplikasi Anda saat ini terkunci. Segera lakukan perpanjangan untuk mengaktifkan kembali layanan.')
             ->action('Hubungi Admin', url('/'))
             ->line('Terima kasih.');
     }

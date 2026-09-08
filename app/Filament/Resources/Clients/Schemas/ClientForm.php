@@ -29,7 +29,8 @@ class ClientForm
                     ->helperText('Format E.164, dipakai untuk notifikasi WhatsApp'),
                 TextInput::make('pic_name')
                     ->label('Nama PIC'),
-                TextInput::make('villa_address')
+                TextInput::make('address')
+                    ->label('Address')
                     ->maxLength(500)
                     ->columnSpanFull(),
                 Select::make('tier')

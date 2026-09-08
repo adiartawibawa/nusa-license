@@ -28,7 +28,7 @@ class SuspendLicenseAction extends Action
             ->authorize(fn ($record) => auth()->user()->can('suspend', $record))
             ->requiresConfirmation()
             ->modalHeading('Suspend License')
-            ->modalDescription('Aplikasi villa client akan langsung terkunci setelah ping berikutnya (maks. 60 detik).')
+            ->modalDescription('Aplikasi client akan langsung terkunci setelah ping berikutnya (maks. 60 detik).')
             ->modalSubmitActionLabel('Ya, Suspend Sekarang')
             ->schema([
                 Select::make('suspend_reason_category')

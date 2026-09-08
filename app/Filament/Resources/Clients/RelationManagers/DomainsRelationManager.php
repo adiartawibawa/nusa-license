@@ -28,7 +28,7 @@ class DomainsRelationManager extends RelationManager
                 TextInput::make('domain_name')
                     ->required()
                     ->maxLength(255)
-                    ->helperText('Tanpa https:// atau www., cth: villa-sunset.com'),
+                    ->helperText('Tanpa https:// atau www., cth: app-sunset.com'),
                 TextInput::make('server_ip')
                     ->label('Server IP')
                     ->maxLength(45),

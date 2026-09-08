@@ -10,10 +10,10 @@ class ManageTelemetryLogs extends ManageRecords
 {
     protected static string $resource = TelemetryLogResource::class;
 
-    protected function getHeaderActions(): array
-    {
-        return [
-            CreateAction::make(),
-        ];
-    }
+    // protected function getHeaderActions(): array
+    // {
+    //     return [
+    //         CreateAction::make(),
+    //     ];
+    // }
 }

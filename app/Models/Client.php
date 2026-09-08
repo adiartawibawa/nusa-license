@@ -15,7 +15,7 @@ use Override;
 
 #[Fillable([
     'name', 'company_name', 'email', 'phone_number',
-    'pic_name', 'villa_address', 'tier', 'is_active',
+    'pic_name', 'address', 'tier', 'is_active',
 ])]
 #[ObservedBy([ClientObserver::class])]
 class Client extends Model

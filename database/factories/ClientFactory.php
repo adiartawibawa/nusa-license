@@ -16,7 +16,7 @@ class ClientFactory extends Factory
             'email' => fake()->unique()->safeEmail(),
             'phone_number' => '+62'.fake()->numerify('8##########'),
             'pic_name' => fake()->name(),
-            'villa_address' => fake()->address(),
+            'address' => fake()->address(),
             'tier' => fake()->randomElement(['standard', 'premium', 'enterprise']),
             'is_active' => true,
         ];

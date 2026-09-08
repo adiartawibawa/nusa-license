@@ -13,22 +13,22 @@ beforeEach(function () {
 
 it('mengenali domain yang terverifikasi sebagai valid', function () {
     Domain::factory()->for($this->client)->create([
-        'domain_name' => 'villa-sunset.com',
+        'domain_name' => 'app-sunset.com',
         'is_verified' => true,
     ]);
 
-    $result = $this->service->isDomainRegistered($this->license->fresh(), 'villa-sunset.com');
+    $result = $this->service->isDomainRegistered($this->license->fresh(), 'app-sunset.com');
 
     expect($result)->toBeTrue();
 });
 
 it('menolak domain yang belum terverifikasi', function () {
     Domain::factory()->for($this->client)->create([
-        'domain_name' => 'villa-sunset.com',
+        'domain_name' => 'app-sunset.com',
         'is_verified' => false,
     ]);
 
-    $result = $this->service->isDomainRegistered($this->license->fresh(), 'villa-sunset.com');
+    $result = $this->service->isDomainRegistered($this->license->fresh(), 'app-sunset.com');
 
     expect($result)->toBeFalse();
 });
@@ -41,23 +41,23 @@ it('menolak domain yang tidak terdaftar sama sekali', function () {
 
 it('menormalisasi domain dengan www dan protocol sebelum matching', function () {
     Domain::factory()->for($this->client)->create([
-        'domain_name' => 'villa-sunset.com',
+        'domain_name' => 'app-sunset.com',
         'is_verified' => true,
     ]);
 
-    $result = $this->service->isDomainRegistered($this->license->fresh(), 'https://www.villa-sunset.com/');
+    $result = $this->service->isDomainRegistered($this->license->fresh(), 'https://www.app-sunset.com/');
 
     expect($result)->toBeTrue();
 });
 
 it('mencocokkan IP server dengan benar', function () {
     Domain::factory()->for($this->client)->create([
-        'domain_name' => 'villa-sunset.com',
+        'domain_name' => 'app-sunset.com',
         'server_ip' => '203.0.113.10',
     ]);
 
-    $valid = $this->service->isIpMatching($this->license->fresh(), 'villa-sunset.com', '203.0.113.10');
-    $invalid = $this->service->isIpMatching($this->license->fresh(), 'villa-sunset.com', '203.0.113.99');
+    $valid = $this->service->isIpMatching($this->license->fresh(), 'app-sunset.com', '203.0.113.10');
+    $invalid = $this->service->isIpMatching($this->license->fresh(), 'app-sunset.com', '203.0.113.99');
 
     expect($valid)->toBeTrue();
     expect($invalid)->toBeFalse();
@@ -65,11 +65,11 @@ it('mencocokkan IP server dengan benar', function () {
 
 it('tidak block request kalau server_ip belum diisi admin', function () {
     Domain::factory()->for($this->client)->create([
-        'domain_name' => 'villa-sunset.com',
+        'domain_name' => 'app-sunset.com',
         'server_ip' => null,
     ]);
 
-    $result = $this->service->isIpMatching($this->license->fresh(), 'villa-sunset.com', 'ip-apapun');
+    $result = $this->service->isIpMatching($this->license->fresh(), 'app-sunset.com', 'ip-apapun');
 
     expect($result)->toBeTrue();
 });
