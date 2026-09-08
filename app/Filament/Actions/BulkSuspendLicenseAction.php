@@ -2,6 +2,7 @@
 
 namespace App\Filament\Actions;
 
+use App\Models\License;
 use App\Services\License\LicenseVerificationService;
 use Filament\Actions\BulkAction;
 use Filament\Forms\Components\Textarea;
@@ -24,6 +25,7 @@ class BulkSuspendLicenseAction extends BulkAction
             ->label('Suspend Terpilih')
             ->icon('heroicon-o-no-symbol')
             ->color('danger')
+            ->authorize(fn () => auth()->user()->can('bulkSuspend', License::class))
             ->requiresConfirmation()
             ->schema([
                 Textarea::make('reason')

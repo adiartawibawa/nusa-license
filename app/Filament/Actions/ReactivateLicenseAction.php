@@ -23,6 +23,7 @@ class ReactivateLicenseAction extends Action
             ->icon('heroicon-o-check-circle')
             ->color('success')
             ->visible(fn ($record) => $record->status->value === 'suspended')
+            ->authorize(fn ($record) => auth()->user()->can('reactivate', $record))
             ->requiresConfirmation()
             ->modalHeading('Reactivate License')
             ->modalDescription('License akan aktif kembali dan client bisa langsung ping ulang.')

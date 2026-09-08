@@ -45,4 +45,19 @@ class LicenseResource extends Resource
             'edit' => EditLicense::route('/{record}/edit'),
         ];
     }
+
+    public static function canCreate(): bool
+    {
+        return auth()->user()->can('create', License::class);
+    }
+
+    public static function canEdit($record): bool
+    {
+        return auth()->user()->can('update', $record);
+    }
+
+    public static function canDelete($record): bool
+    {
+        return auth()->user()->can('delete', $record);
+    }
 }

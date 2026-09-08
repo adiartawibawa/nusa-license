@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Concerns\HasUuidv7;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Override;
@@ -14,7 +15,7 @@ use Override;
 ])]
 class AlertLog extends Model
 {
-    use HasUuidv7;
+    use HasFactory, HasUuidv7;
 
     #[Override]
     protected function casts()

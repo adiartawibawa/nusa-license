@@ -25,6 +25,7 @@ class SuspendLicenseAction extends Action
             ->icon('heroicon-o-no-symbol')
             ->color('danger')
             ->visible(fn ($record) => $record->status->value !== 'suspended')
+            ->authorize(fn ($record) => auth()->user()->can('suspend', $record))
             ->requiresConfirmation()
             ->modalHeading('Suspend License')
             ->modalDescription('Aplikasi villa client akan langsung terkunci setelah ping berikutnya (maks. 60 detik).')
